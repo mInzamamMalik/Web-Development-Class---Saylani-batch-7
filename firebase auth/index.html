@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.8.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.8.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.8.0/firebase-database.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyC1NNBNfAlwfs8mWvMPcA6ycgJA7GY5DD0",
+            authDomain: "todoappication.firebaseapp.com",
+            databaseURL: "https://todoappication-default-rtdb.firebaseio.com",
+            projectId: "todoappication",
+            storageBucket: "todoappication.appspot.com",
+            messagingSenderId: "220292562540",
+            appId: "1:220292562540:web:f3e365f964c3f50816e249"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+    </script>
+</head>
+
+<body>
+    <button onclick="facebookLogin()"> Continue With Facebook </button>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,49 @@
+* {
+    margin: 0px;
+    padding: 0px;
+}
+
+.todoH {
+    margin-top: 1%;
+}
+
+.todoapp {
+    align-items: center;
+    text-align: center;
+    align-content: center;
+}
+
+#input,
+#list li input {
+    border: none;
+    border-bottom: 2px solid rgb(1, 5, 255);
+    margin-top: 2%;
+    width: 57%;
+    font-size: 16pt;
+    color: blue;
+    outline: none;
+    resize: none;
+}
+
+.add_btn,
+.deletelbtn {
+    width: 19.5%;
+    padding: 0.5% 0;
+    color: white;
+}
+
+.add_btn {
+    background-color: rgb(58, 62, 246);
+}
+
+.deletelbtn {
+    background-color: rgb(255 155 25);
+}
+
+img {
+    width: 30px;
+}
+
+hr {
+    margin-top: 1%;
+}

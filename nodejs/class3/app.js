@@ -16,12 +16,12 @@ mongoose.connect(DB_URI, {
 
 
 app.get("/add", (request, response) => {
-    postModel.create({ title: "HBD", description: "Happy birthday" }, (error, data) => {
+    postModel.create({ title: "HBD" }, (error, data) => {
         if (error) {
             response.send(error.message);
         } else {
             console.log(data);
-            response.send("Success");
+            response.send("Success")
         }
     });
 
