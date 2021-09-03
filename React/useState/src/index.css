@@ -1,0 +1,25 @@
+body {
+  color: red;
+}
+
+#main {
+  border: 1px solid black;
+}
+
+.img {
+  width: 200px
+}
+
+.Dark {
+  background-color: #202124;
+  color: white;
+  width: 200px;
+  height: 200px;
+}
+
+.Bright {
+  background-color: white;
+  color: black;
+  width: 200px;
+  height: 200px;
+}
