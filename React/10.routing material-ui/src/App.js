@@ -7,6 +7,7 @@ import {
   Link
 } from "react-router-dom";
 
+import { SearchAppBar } from "./components/surfaces/appBar"
 import Home from "./components/home/home"
 import Contact from "./components/contact/contact"
 import About from "./components/about/about"
@@ -28,7 +29,7 @@ function App() {
 
       App component
 
-      <Box sx={{ flexGrow: 1 }}>
+      {/* <Box sx={{ flexGrow: 1 }}>
         <AppBar position="sticky">
           <Toolbar>
             <IconButton
@@ -56,8 +57,9 @@ function App() {
           </Toolbar>
         </AppBar>
       </Box>
+ */}
 
-
+      <SearchAppBar />
 
       <nav>
         <ul>
@@ -85,12 +87,19 @@ function App() {
 
         <Route path="/">
           <Home />
+          <HelloComp />
         </Route>
 
       </Switch>
+
 
     </Router>
   );
 }
 
 export default App;
+
+
+export function HelloComp() {
+  return <h1> I am Hello component </h1>
+}
