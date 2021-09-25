@@ -1,16 +1,10 @@
 import React, { createContext, useReducer } from 'react'
-import { reducer } from './../reducer/Reducer';
+import { reducer } from './Reducer';
 
 export const GlobalContext = createContext("Initial Value");
 let data = {
-
-  user: {
-    userName: "Malik",
-    email: "malik@sysborg.com",
-    subject: "Computer Science"
-  },
-  darkTheme: true
-
+  darkTheme: true,
+  user: {}
 }
 
 export default function ContextProvider({ children }) {
