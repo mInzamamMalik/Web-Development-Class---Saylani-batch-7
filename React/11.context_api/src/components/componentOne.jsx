@@ -16,7 +16,7 @@ function ComponentOne() {
         dispatch({
             type: "USER_LOGIN",
             payload: {
-                userName: "Malik",
+                username: "Malik",
                 email: "malik@sysborg.com",
                 subject: "Computer Science"
             }
