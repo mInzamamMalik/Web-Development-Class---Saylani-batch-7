@@ -1,5 +1,6 @@
 import './App.css';
 import { Formik, Field, Form, useFormik } from "formik";
+import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import * as yup from 'yup';
@@ -23,7 +24,7 @@ const validationSchema = yup.object({
     .required('Password is required'),
   website: yup
     .string('Enter your password')
-   .url("please enter valid URL e.g: https://somewebsite.com")
+    .url("please enter valid URL e.g: https://somewebsite.com")
     .required('Password is required'),
 });
 
@@ -32,16 +33,13 @@ function App() {
 
   const formik = useFormik({
     validationSchema: validationSchema,
-
     initialValues: {
       website: '',
       email: '',
       password: '',
     },
-
     onSubmit: onSubmitFunction
   });
-
 
 
   return (
@@ -60,55 +58,56 @@ function App() {
 
 
       <form onSubmit={formik.handleSubmit}>
+        <Stack spacing={2}>
+          <TextField
+            fullWidth
+            color="primary"
+            id="outlined-basic"
+            label="Outlined"
+            variant="outlined"
 
-        <TextField
-          fullWidth
-          color="primary"
-          id="outlined-basic"
-          label="Outlined"
-          variant="outlined"
+            name="website"
+            value={formik.values.website}
+            onChange={formik.handleChange}
 
-          name="website"
-          value={formik.values.website}
-          onChange={formik.handleChange}
+            error={formik.touched.website && Boolean(formik.errors.website)}
+            helperText={formik.touched.website && formik.errors.website}
+          />
 
-          error={formik.touched.website && Boolean(formik.errors.website)}
-          helperText={formik.touched.website && formik.errors.website}
+          <TextField
+            fullWidth
+            color="primary"
+            id="outlined-basic"
+            label="Outlined"
+            variant="outlined"
 
-        />
-        <TextField
-          fullWidth
-          color="primary"
-          id="outlined-basic"
-          label="Outlined"
-          variant="outlined"
+            name="email"
+            value={formik.values.email}
+            onChange={formik.handleChange}
 
-          name="email"
-          value={formik.values.email}
-          onChange={formik.handleChange}
+            error={formik.touched.email && Boolean(formik.errors.email)}
+            helperText={formik.touched.email && formik.errors.email}
+          />
 
-          error={formik.touched.email && Boolean(formik.errors.email)}
-          helperText={formik.touched.email && formik.errors.email}
+          <TextField
+            fullWidth
+            color="primary"
+            id="filled-basic"
+            label="Outlined"
+            variant="outlined"
+            type="password"
 
-        />
+            name="password"
+            value={formik.values.password}
+            onChange={formik.handleChange}
 
-        <TextField
-          fullWidth
-          color="primary"
-          id="filled-basic"
-          label="Outlined"
-          variant="outlined"
-          type="password"
+            error={formik.touched.password && Boolean(formik.errors.password)}
+            helperText={formik.touched.password && formik.errors.password}
+          />
 
-          name="password"
-          value={formik.values.password}
-          onChange={formik.handleChange}
+          <Button fullWidth variant="contained" color="primary" type="submit">Button</Button>
+        </Stack>
 
-          error={formik.touched.password && Boolean(formik.errors.password)}
-          helperText={formik.touched.password && formik.errors.password}
-        />
-
-        <Button variant="contained" color="primary" type="submit">Button</Button>
       </form>
     </div>
   );
