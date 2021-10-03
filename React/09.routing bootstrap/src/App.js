@@ -3,9 +3,9 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
+  Link,
+  useHistory
 } from "react-router-dom";
-import { useHistory } from "react-router-dom";
 
 
 import Home from "./components/home/home"

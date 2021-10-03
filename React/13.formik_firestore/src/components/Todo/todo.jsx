@@ -1,12 +1,14 @@
 import './todo.css';
-import { Formik, Field, Form, useFormik } from "formik";
+import { useFormik } from "formik";
+import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 import * as yup from 'yup';
 import { collection, addDoc, getDocs } from "firebase/firestore"
 import { useEffect, useState } from "react"
-import { db } from './../firebase'
+import { db } from './../../firebase'
 
 const userCol = collection(db, "todo")
 
@@ -15,23 +17,24 @@ const validationSchema = yup.object({
     title: yup
         .string('Enter your email')
         .required('Email is required'),
-   
 });
 
 
 function Todo() {
-
     const [todo, settodo] = useState([])
+    useEffect(() => {
 
-    useEffect(async () => {
+        const getData = async () => {
+            const querySnapshot = await getDocs(userCol);
+            let todo = []
+            querySnapshot.forEach((doc) => {
+                console.log(`${doc.id} => ${doc.data()}`);
+                todo.push(doc.data())
+            });
+            settodo(todo)
+        }
+        getData()
 
-        const querySnapshot = await getDocs(userCol);
-        let todo = []
-        querySnapshot.forEach((doc) => {
-            console.log(`${doc.id} => ${doc.data()}`);
-            todo.push(doc.data())
-        });
-        settodo(todo)
         return () => {
             console.log("cleanup")
         };
@@ -60,7 +63,12 @@ function Todo() {
 
 
     return (
-        <div style={{ padding: "1rem" }}>
+        <Box sx={{ flexGrow: 1, m: 2 }} >
+
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                Todo
+            </Typography>
+
 
             <form onSubmit={formik.handleSubmit}>
                 <Stack spacing={2}>
@@ -102,9 +110,9 @@ function Todo() {
 
 
             <div>
-                {todo.map(eachUser => {
+                {todo.map((eachUser, i) => {
 
-                    return (<div>
+                    return (<div key={i}>
                         <div> title: {eachUser.title}</div>
                         <div>description: {eachUser.description}</div>
                         <br />
@@ -115,7 +123,7 @@ function Todo() {
 
 
 
-        </div>
+        </Box>
     );
 }
 
