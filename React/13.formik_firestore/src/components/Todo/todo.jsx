@@ -22,6 +22,7 @@ const validationSchema = yup.object({
 
 function Todo() {
     const [todo, settodo] = useState([])
+    
     useEffect(() => {
 
         const getData = async () => {
@@ -53,7 +54,7 @@ function Todo() {
                     description: values.description,
                 });
                 console.log("Document written with ID: ", docRef.id);
-                alert("signup Successful");
+                alert("Todo Added");
             } catch (e) {
                 console.error("Error adding document: ", e);
             }
