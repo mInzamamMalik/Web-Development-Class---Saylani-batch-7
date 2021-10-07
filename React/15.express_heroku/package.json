@@ -1,0 +1,23 @@
+{
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "name": "demo-server-heroku",
+  "version": "1.0.0",
+  "main": "app.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://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@github.com/malikasinger1/demo-server-heroku.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/malikasinger1/demo-server-heroku/issues"
+  },
+  "homepage": "https://github.com/malikasinger1/demo-server-heroku#readme",
+  "description": ""
+}
