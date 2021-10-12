@@ -6,6 +6,10 @@ const path = require('path')
 
 app.use('/', express.static(path.join(__dirname, 'web/build')))
 
+// // never do this
+// app.get('/create', (req, res) => {
+//     res.send('here is your create')
+// })
 
 // app.get('/', (req, res) => {
 //     res.send('Hello World!')
@@ -25,7 +29,8 @@ app.delete('/api/v1/profile', (req, res) => {
 })
 
 app.get("/**", (req, res, next) => {
-    res.sendFile(path.join(__dirname, "./web/build/index.html"))
+    // res.sendFile(path.join(__dirname, "./web/build/index.html"))
+    res.redirect("/")
 })
 
 // app.use((req,res,next)=>{   
