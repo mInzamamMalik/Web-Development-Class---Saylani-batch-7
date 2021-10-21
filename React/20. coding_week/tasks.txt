@@ -1,0 +1,48 @@
+In last class I gave you assignment of login signup
+
+1. you will create a react.js app with minimum 2 pages, i.e: login and signup 
+2. You must use router to navigate login and signup pages
+3. You must have to have express.js server and mongodb database connected to it for saving user data hosted on heroku cloud
+4. You must have to have your react app in the same express server, you are not allowed to use firebase hosting 
+5. You must use mongodb atlas cloud for your database hosting 
+
+You are supposed to have this app completed by now
+
+In todays task:
+If someone haven't completed that task then complete that first and then
+you will be adding following features in that login signup app.
+
+
+1) you must use material Ui for in your react app or any other css framework of your choice, your app must be responsive to standard mobile standard tablet and standard laptop screens
+2) you must use formik for front end validation
+3) You must use buttons and other Ui components from Ui framework such as material Ui
+4) your apis must follow the rest api design guideline
+5) If user write a url in browser that doesn’t exist user should be redirected to home page, i have shown you how to do this in last class, you can get help from class code
+6) make another page in that react app at /profile
+7) get user profile data what you asked at the time of signup and display on that page
+8) User should be able to add/edit their profile data such as name email password address 
+9) Add another page where at / where user can share a post like Facebook (nothing more then a todo app which we have already done in class) for now the post is required be text only.
+
+10)  your user password will be saved in hash form in the mongodb, only cheetah student will be able to do this task. and who ever will complete this task will get chocolates from me, I will come with a box of chocolates lets see how many cheetah students do we have in our class
+Hint: user npm library “bcrypt-inzi” in your express server to do so.
+
+Rules: 
+1) you can get help from the internet, you can not copy paste code from internet, see and write it yourself
+2) you can ask your friend gently, you are not allowed to copy paste your friend's code
+3) you are allowed to help your classmate verbally, everyone must write his own code with his own hand
+4) during this coding week there will be no one watching you, you are watching yourself 
+5) you will push your code in github public repository, either in single or multiple repository
+6) app should be hosted on heroku, and the url should be mentioned in your repository
+7) if anyone will not push the code in github, he will be considered absent that day, and will be reposible for the consequences
+8) understanding the questions is the part of this task.
+9) you must need to do this coding in the class, I discourage you to do it from home
+
+Goal: 
+goal of this coding week is to give you hands on practice opportunity of what you have learned sofar
+if you do not paticipate or do not write this coding task I guarentee you can not survive this course
+this assessment is for yourself, to let you know how much efforts you are putting and how much more efforts you are required to put in the event of becoming world class software developer
+at the end of this coding week no one will be checking your code,
+I want you to make learning fun and more enjoyable for you, be social with your class mates
+
+
+
