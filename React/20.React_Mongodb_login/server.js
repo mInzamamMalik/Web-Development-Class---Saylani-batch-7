@@ -3,6 +3,7 @@ const PORT = process.env.PORT || 5000
 const app = express()
 const mongoose = require('mongoose');
 const cors = require("cors");
+const path = require("path");
 
 mongoose.connect('mongodb+srv://dbuser:dbpassword@cluster0.nr4e4.mongodb.net/myFirstDatabase?retryWrites=true&w=majority');
 
@@ -17,6 +18,8 @@ const User = mongoose.model('User', {
 
 app.use(express.json())
 app.use(cors(["localhost:3000", "localhost:5000"]))
+
+app.use('/', express.static(path.join(__dirname, 'web/build')))
 
 app.post('/api/v1/login', (req, res) => {
 
@@ -82,6 +85,10 @@ app.delete('/api/v1/profile', (req, res) => {
     res.send('profile deleted')
 })
 
+app.get("/**", (req, res, next) => {
+    res.sendFile(path.join(__dirname, "./web/build/index.html"))
+    // res.redirect("/")
+})
 app.listen(PORT, () => {
     console.log(`Example app listening at http://localhost:${PORT}`)
 })

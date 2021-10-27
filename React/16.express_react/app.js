@@ -29,8 +29,8 @@ app.delete('/api/v1/profile', (req, res) => {
 })
 
 app.get("/**", (req, res, next) => {
-    // res.sendFile(path.join(__dirname, "./web/build/index.html"))
-    res.redirect("/")
+    res.sendFile(path.join(__dirname, "./web/build/index.html"))
+    // res.redirect("/")
 })
 
 // app.use((req,res,next)=>{   

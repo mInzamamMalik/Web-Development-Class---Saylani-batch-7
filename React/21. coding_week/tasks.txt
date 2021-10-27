@@ -23,7 +23,7 @@ you will be adding following features in that login signup app.
 8) User should be able to add/edit their profile data such as name email password address 
 9) Add another page where at / where user can share a post like Facebook (nothing more then a todo app which we have already done in class) for now the post is required be text only.
 
-10)  your user password will be saved in hash form in the mongodb, only cheetah student will be able to do this task. and who ever will complete this task will get chocolates from me, I will come with a box of chocolates lets see how many cheetah students do we have in our class
+10) your user password will be saved in hash form in the mongodb, only cheetah student will be able to do this task. and who ever will complete this task will get chocolates from me, I will come with a box of chocolates lets see how many cheetah students do we have in our class
 Hint: user npm library “bcrypt-inzi” in your express server to do so.
 
 Rules: 
