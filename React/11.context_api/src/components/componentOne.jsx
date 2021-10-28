@@ -3,7 +3,7 @@ import { GlobalContext } from '../context/Context';
 import { useContext } from "react";
 
 function ComponentOne() {
-    let { state, dispatch } = useContext(GlobalContext);
+    let { state, dispatch } = useContext(GlobalContext); 
 
     function logout() {
         dispatch({
