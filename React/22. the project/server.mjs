@@ -7,7 +7,10 @@ import {
     stringToHash,
     varifyHash
 } from "bcrypt-inzi"
+import jwt from 'jsonwebtoken';
 
+
+const SECRET = process.env.SECRET || "12345"
 const PORT = process.env.PORT || 5001
 const app = express()
 
@@ -45,7 +48,16 @@ app.post('/api/v1/login', (req, res) => {
 
                 varifyHash(req.body.password, user.password).then(result => {
                     if (result) {
+
+                        var token = jwt.sign({
+                            name: user.name,
+                            email: user.email,
+                            _id: user._id,
+                        }, SECRET);
+                        console.log("token created: ", token);
+
                         res.send({
+                            token: token,
                             name: user.name,
                             email: user.email,
                             _id: user._id,
@@ -91,7 +103,7 @@ app.post('/api/v1/signup', (req, res) => {
                     })
                     newUser.save(() => {
                         console.log("data saved")
-                        res.send('profile created')
+                        res.send('signup success')
                     })
                 })
             }
@@ -99,6 +111,24 @@ app.post('/api/v1/signup', (req, res) => {
     }
 
 })
+
+app.use((req, res, next) => {
+
+    jwt.verify(req.body.token, SECRET,
+        function (err, decoded) {
+            
+            console.log(decoded) // bar
+
+            if (!err) {
+                next();
+            } else {
+                res.status(401).send("Un-Authenticated")
+            }
+
+        })
+
+});
+
 
 app.get('/api/v1/profile', (req, res) => {
     res.send('here is your profile')
