@@ -8,6 +8,8 @@ import {
     varifyHash
 } from "bcrypt-inzi"
 import jwt from 'jsonwebtoken';
+import cookieParser from 'cookie-parser';
+
 
 
 const SECRET = process.env.SECRET || "12345"
@@ -24,11 +26,12 @@ const User = mongoose.model('User', {
 });
 
 app.use(express.json())
+app.use(cookieParser())
 app.use(cors(["localhost:3000", "localhost:5001"]))
 
 app.get('/', express.static(path.join(__dirname, 'web/build')))
 
-app.post('/api/v1/login', (req, res) => {
+app.post('/api/v1/login', (req, res, next) => {
 
     if (!req.body.email ||
         !req.body.password
@@ -56,8 +59,13 @@ app.post('/api/v1/login', (req, res) => {
                         }, SECRET);
                         console.log("token created: ", token);
 
+                        res.cookie("token", token, {
+                            httpOnly: true,
+                            // expires: (new Date().getTime + 300000), //5 minutes
+                            maxAge: 300000
+                        });
+
                         res.send({
-                            token: token,
                             name: user.name,
                             email: user.email,
                             _id: user._id,
@@ -76,7 +84,7 @@ app.post('/api/v1/login', (req, res) => {
     })
 })
 
-app.post('/api/v1/signup', (req, res) => {
+app.post('/api/v1/signup', (req, res, next) => {
 
     if (!req.body.email ||
         !req.body.password ||
@@ -114,9 +122,9 @@ app.post('/api/v1/signup', (req, res) => {
 
 app.use((req, res, next) => {
 
-    jwt.verify(req.body.token, SECRET,
+    jwt.verify(req.cookies.token, SECRET,
         function (err, decoded) {
-            
+
             console.log(decoded) // bar
 
             if (!err) {
