@@ -27,7 +27,11 @@ const User = mongoose.model('User', {
 
 app.use(express.json())
 app.use(cookieParser())
-app.use(cors(["localhost:3000", "localhost:5001"]))
+
+app.use(cors({
+    origin: ["http://localhost:3000", "http://localhost:5001"],
+    credentials: true
+}))
 
 app.get('/', express.static(path.join(__dirname, 'web/build')))
 
@@ -125,7 +129,9 @@ app.use((req, res, next) => {
     jwt.verify(req.cookies.token, SECRET,
         function (err, decoded) {
 
-            console.log(decoded) // bar
+            req.body._decoded = decoded;
+
+            console.log("decoded: ", decoded) // bar
 
             if (!err) {
                 next();
@@ -137,9 +143,31 @@ app.use((req, res, next) => {
 
 });
 
+app.post('/api/v1/logout', (req, res, next) => {
+    res.cookie("token", "", {
+        httpOnly: true,
+        maxAge: 300000
+    });
+    res.send();
+})
 
 app.get('/api/v1/profile', (req, res) => {
-    res.send('here is your profile')
+    User.findOne({ email: req.body._decoded.email }, (err, user) => {
+
+        if (err) {
+            res.status(500).send("error in getting database")
+        } else {
+            if (user) {
+                res.send({
+                    name: user.name,
+                    email: user.email,
+                    _id: user._id,
+                });
+            } else {
+                res.send("user not found");
+            }
+        }
+    })
 })
 app.post('/api/v1/profile', (req, res) => {
     res.send('profile created')

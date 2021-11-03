@@ -51,6 +51,8 @@ function Weather() {
       axios.post(`${baseUrl}/api/v1/login`, {
         email: values.email,
         password: values.password,
+      }, {
+        withCredentials: true
       })
         .then((res) => {
           console.log("res: ", res.data);
