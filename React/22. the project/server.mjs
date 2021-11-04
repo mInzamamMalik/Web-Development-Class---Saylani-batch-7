@@ -11,7 +11,6 @@ import jwt from 'jsonwebtoken';
 import cookieParser from 'cookie-parser';
 
 
-
 const SECRET = process.env.SECRET || "12345"
 const PORT = process.env.PORT || 5001
 const app = express()
@@ -33,7 +32,11 @@ app.use(cors({
     credentials: true
 }))
 
-app.get('/', express.static(path.join(__dirname, 'web/build')))
+app.use('/', express.static(path.join(__dirname, 'web/build')))
+app.get("/", (req, res, next) => {
+    res.sendFile(path.join(__dirname, "./web/build/index.html"))
+})
+
 
 app.post('/api/v1/login', (req, res, next) => {
 
@@ -136,7 +139,7 @@ app.use((req, res, next) => {
             if (!err) {
                 next();
             } else {
-                res.status(401).send("Un-Authenticated")
+                res.status(401).sendFile(path.join(__dirname, "./web/build/index.html"))
             }
 
         })

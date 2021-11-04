@@ -70,7 +70,7 @@ function App() {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
               <Nav.Link onClick={() => { history.push("/") }}>Dashboard</Nav.Link>
-              <Nav.Link onClick={() => { history.push("/login") }}>Login</Nav.Link>
+              <Nav.Link onClick={() => { history.push("/") }}>Login</Nav.Link>
               <Nav.Link onClick={() => { history.push("/signup") }}>Signup</Nav.Link>
 
             </Nav>
@@ -86,7 +86,7 @@ function App() {
           <Route exact path="/">
             <Splash />
           </Route>
-          <Redirect to="/" />
+          {/* <Redirect to="/" /> */}
         </Switch>
         : null}
 
@@ -95,7 +95,7 @@ function App() {
           <Route exact path="/" component={Login} />
           <Route path="/signup" component={Signup} />
 
-          <Redirect to="/" />
+          {/* <Redirect to="/" /> */}
         </Switch> : null
       }
 
@@ -105,7 +105,7 @@ function App() {
             <Dashboard />
           </Route>
 
-          <Redirect to="/" />
+          {/* <Redirect to="/" /> */}
         </Switch>
         : null}
 
