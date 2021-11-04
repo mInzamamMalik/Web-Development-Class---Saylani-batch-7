@@ -4,7 +4,7 @@ import { reducer } from './Reducer';
 export const GlobalContext = createContext("Initial Value");
 let data = {
   darkTheme: true,
-  user: {}
+  user: undefined
 }
 
 export default function ContextProvider({ children }) {

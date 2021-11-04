@@ -18,6 +18,7 @@ import { Button, Navbar, Container, Nav, NavDropdown } from 'react-bootstrap';
 
 
 
+import Splash from "./components/splashScreen/index"
 import Login from "./components/login/index"
 import Signup from "./components/signup/index"
 import Dashboard from "./components/dashboard/index"
@@ -48,7 +49,11 @@ function App() {
               _id: res.data._id
             }
           })
+        } else {
+          dispatch({ type: "USER_LOGOUT" })
         }
+      }).catch((e) => {
+        dispatch({ type: "USER_LOGOUT" })
       })
 
     return () => {
@@ -76,8 +81,25 @@ function App() {
 
 
 
-      {(state.user.email) ?
+      {(state.user === undefined) ?
+        <Switch>
+          <Route exact path="/">
+            <Splash />
+          </Route>
+          <Redirect to="/" />
+        </Switch>
+        : null}
 
+      {(state.user === null) ?
+        <Switch>
+          <Route exact path="/" component={Login} />
+          <Route path="/signup" component={Signup} />
+
+          <Redirect to="/" />
+        </Switch> : null
+      }
+
+      {(state.user) ?
         <Switch>
           <Route exact path="/">
             <Dashboard />
@@ -85,14 +107,8 @@ function App() {
 
           <Redirect to="/" />
         </Switch>
-        :
-        <Switch>
-          <Route exact path="/" component={Login} />
-          <Route path="/signup" component={Signup} />
+        : null}
 
-          <Redirect to="/" />
-        </Switch>
-      }
     </>
   );
 }
