@@ -18,7 +18,6 @@ const server = createServer(app);
 // handing over server access to socket.io
 const io = new Server(server, { cors: { origin: "*", methods: "*", } });
 
-let connectedUsers = [];
 
 io.on("connection", (socket) => {
     console.log("New client connected with id: ", socket.id);

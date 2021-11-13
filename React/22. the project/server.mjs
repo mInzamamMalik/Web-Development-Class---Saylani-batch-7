@@ -2,6 +2,10 @@ import express from 'express'
 import mongoose from "mongoose"
 import cors from "cors"
 import path from "path";
+import { createServer } from "http";
+import { Server } from "socket.io";
+
+
 const __dirname = path.resolve();
 import {
     stringToHash,
@@ -198,6 +202,14 @@ app.post("/api/v1/post", (req, res) => {
     });
     newPost.save().then(() => {
         console.log("Post created");
+
+        io.emit("POSTS", {
+            postText: req.body.postText,
+            userId: req.body._decoded._id,
+            name: req.body._decoded.name,
+            email: req.body._decoded.email
+        });
+
         res.send("Post created");
     });
 });
@@ -239,6 +251,39 @@ app.get("/**", (req, res, next) => {
     // res.redirect("/")
 })
 
-app.listen(PORT, () => {
-    console.log(`Example app listening at http://localhost:${PORT}`)
+// app.listen(PORT, () => {
+//     console.log(`Example app listening at http://localhost:${PORT}`)
+// })
+
+const server = createServer(app);
+
+const io = new Server(server, { cors: { origin: "*", methods: "*", } });
+
+io.on("connection", (socket) => {
+    console.log("New client connected with id: ", socket.id);
+
+    // to emit data to a certain client
+    socket.emit("topic 1", "some data")
+
+    // collecting connected users in a array
+    // connectedUsers.push(socket)
+
+    socket.on("disconnect", (message) => {
+        console.log("Client disconnected with id: ", message);
+    });
+});
+
+
+setInterval(() => {
+
+    // to emit data to all connected client
+    // first param is topic name and second is json data
+    io.emit("Test topic", { event: "ADDED_ITEM", data: "some data" });
+    console.log("emiting data to all client");
+
+}, 2000)
+
+
+server.listen(PORT, function () {
+    console.log("server is running on", PORT);
 })

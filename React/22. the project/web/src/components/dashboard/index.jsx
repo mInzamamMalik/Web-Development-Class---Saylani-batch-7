@@ -8,7 +8,7 @@ import Post from "./post"
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
-
+import io from 'socket.io-client';
 
 
 function Dashboard() {
@@ -26,8 +26,28 @@ function Dashboard() {
             .then((res) => {
                 console.log("res +++: ", res.data);
                 setPosts(res.data)
+
             })
-    }, [refresh])
+    }, [])
+
+    useEffect(() => {
+        const socket = io("http://localhost:5001"); // to connect with locally running Socker.io server
+
+        socket.on('connect', function () {
+            console.log("connected to server")
+        });
+        socket.on('disconnect', function (message) {
+            console.log("disconnected from server: ", message);
+        });
+        socket.on('POSTS', function (data) {
+            console.log(data);
+            setPosts((prev) => [data, ...prev])
+        });
+
+        return () => {
+            socket.close();
+        };
+    }, []);
 
     const loadMore = () => {
         axios.get(`${baseUrl}/api/v1/posts?page=${posts.length}`,
@@ -56,7 +76,7 @@ function Dashboard() {
                 .then((res) => {
                     console.log("res: ", res.data);
                     setRefresh(!refresh)
-                    alert("post created");
+                    // alert("post created");
 
                 })
         }
@@ -86,8 +106,8 @@ function Dashboard() {
 
             <br />
 
-            {posts.map((eachPost) => (
-                <Post name={eachPost.name} email={eachPost.email} text={eachPost.postText} />
+            {posts.map((eachPost, index) => (
+                <Post key={index} name={eachPost.name} email={eachPost.email} text={eachPost.postText} />
             ))}
 
             <br />
