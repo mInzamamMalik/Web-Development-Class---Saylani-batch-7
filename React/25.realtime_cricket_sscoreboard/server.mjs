@@ -12,7 +12,7 @@ const app = express()
 
 mongoose.connect('mongodb+srv://dbuser:dbpassword@cluster0.nr4e4.mongodb.net/myFirstDatabase?retryWrites=true&w=majority');
 
-const Post = mongoose.model("Score", {
+const Score = mongoose.model("Score", {
     teamOne: String,
     teamTwo: String,
     bat: String,
@@ -37,7 +37,7 @@ app.post("/api/v1/score", (req, res) => {
         teamOne: req.body.teamOne,
         teamTwo: req.body.teamTwo,
         bat: req.body.bat,
-        Score: req.body.score,
+        score: req.body.score,
         over: req.body.over,
     });
     newScore.save().then(() => {
@@ -47,7 +47,7 @@ app.post("/api/v1/score", (req, res) => {
             teamOne: req.body.teamOne,
             teamTwo: req.body.teamTwo,
             bat: req.body.bat,
-            Score: req.body.score,
+            score: req.body.score,
             over: req.body.over,
         });
 
