@@ -5,7 +5,6 @@ import path from "path";
 import { createServer } from "http";
 import { Server } from "socket.io";
 const __dirname = path.resolve();
-import cookieParser from 'cookie-parser';
 
 const PORT = process.env.PORT || 5001
 const app = express()
@@ -17,14 +16,13 @@ const Score = mongoose.model("Score", {
     teamTwo: String,
     bat: String,
     score: String,
+    wicket: String,
     over: String,
 })
 app.use(express.json())
-app.use(cookieParser())
 
 app.use(cors({
     origin: true,
-    credentials: true
 }))
 
 app.use('/', express.static(path.join(__dirname, 'web/build')))
@@ -38,6 +36,7 @@ app.post("/api/v1/score", (req, res) => {
         teamTwo: req.body.teamTwo,
         bat: req.body.bat,
         score: req.body.score,
+        wicket: req.body.wicket,
         over: req.body.over,
     });
     newScore.save().then(() => {
@@ -48,6 +47,7 @@ app.post("/api/v1/score", (req, res) => {
             teamTwo: req.body.teamTwo,
             bat: req.body.bat,
             score: req.body.score,
+            wicket: req.body.wicket,
             over: req.body.over,
         });
 
@@ -57,7 +57,6 @@ app.post("/api/v1/score", (req, res) => {
 
 app.get("/api/v1/score", (req, res) => {
 
-    console.log("page: ", page);
     Score.findOne({})
         .sort({ _id: "desc" })
         .exec(function (err, data) {
