@@ -27,6 +27,12 @@ const User = mongoose.model('User', {
     password: String,
     created: { type: Date, default: Date.now },
 });
+const Otp = mongoose.model('Otp', {
+    email: String,
+    otp: String,
+    used: { type: Boolean, default: false },
+    created: { type: Date, default: Date.now },
+});
 const Post = mongoose.model("Post", {
     postText: String,
     created: { type: Date, default: Date.now },
@@ -136,6 +142,49 @@ app.post('/api/v1/signup', (req, res, next) => {
         })
     }
 
+})
+
+app.post('/api/v1/otp', (req, res, next) => {
+
+    if (!req.body.email) {
+        console.log("required field missing");
+        res.status(403).send("required field missing");
+        return;
+    }
+    console.log("req.body: ", req.body);
+
+    User.findOne({ email: req.body.email }, (err, user) => {
+
+        if (err) {
+            res.status(500).send("error in getting database")
+        } else {
+            if (user) {
+
+                function getRandomArbitrary(min, max) {
+                    return Math.random() * (max - min) + min;
+                }
+                const otp = getRandomArbitrary(11111, 99999).toFixed(0);
+                console.log("otp: ", otp);
+
+                let newOtp = new Otp({
+                    email: req.body.email,
+                    otp: stringToHash(otp),
+                })
+                newOtp.save((err, saved) => {
+                    if (!err) {
+                        // TODO: send otp via email
+
+                        res.send("otp genrated");
+                    } else {
+                        res.status(500).send("error on server")
+                    }
+                })
+
+            } else {
+                res.send("user not found");
+            }
+        }
+    })
 })
 
 app.use((req, res, next) => {
