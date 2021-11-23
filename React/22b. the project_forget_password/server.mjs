@@ -189,10 +189,10 @@ app.post('/api/v1/otp', (req, res, next) => {
                                 }
                             });
 
-                            res.send("otp genrated");
+                            res.send({ otpSent: true, message: "otp genrated" });
                         } else {
                             console.log("error: ", err);
-                            res.status(500).send("error on server")
+                            res.status(500).send("error saving otp on server")
                         }
                     })
                 })
@@ -203,7 +203,7 @@ app.post('/api/v1/otp', (req, res, next) => {
         }
     })
 })
-app.post('/api/v1/forget_password', (req, res, next) => {
+app.post('/api/v1/forget', (req, res, next) => {
 
     if (!req.body.email || !req.body.otp || !req.body.newPassword) {
         console.log("required field missing");
@@ -231,18 +231,19 @@ app.post('/api/v1/forget_password', (req, res, next) => {
                         varifyHash(req.body.otp, otp.otp).then(isMatch => {
                             if (isMatch) {
 
-                                User.findOneAndUpdate(
-                                    { email: req.body.email },
-                                    { password: stringToHash(req.body.newPassword) },
-                                    {},
-                                    (err, updated) => {
-                                        if (!err) {
-                                            res.send("password updated");
-                                        } else {
-                                            res.status(500).send("error on server")
-                                        }
-                                    }) 
-
+                                stringToHash(req.body.newPassword).then((hashPassword) => {
+                                    User.findOneAndUpdate(
+                                        { email: req.body.email },
+                                        { password: hashPassword },
+                                        {},
+                                        (err, updated) => {
+                                            if (!err) {
+                                                res.send("password updated");
+                                            } else {
+                                                res.status(500).send("error updating user")
+                                            }
+                                        })
+                                })
                                 otp.update({ used: true })
                                     .exec((err, updated) => {
                                         if (!err) {

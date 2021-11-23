@@ -67,13 +67,13 @@ function ForgetPassword() {
     }
   });
   const formik_step2 = useFormik({
-    validationSchema: validationSchema_step2,
     initialValues: {
       otp: "",
       newPassword: "",
       confirmPassword: ""
     },
     onSubmit: function (values) {
+      console.log(values)
 
       axios.post(`${baseUrl}/api/v1/forget`, {
         email: email,
@@ -121,7 +121,7 @@ function ForgetPassword() {
 
         </form> :
 
-        <form onSubmit={formik.handleSubmit}>
+        <form onSubmit={formik_step2.handleSubmit}>
           <Stack spacing={2}>
 
             <TextField
@@ -132,11 +132,11 @@ function ForgetPassword() {
               variant="outlined"
 
               name="otp"
-              value={formik.values.otp}
-              onChange={formik.handleChange}
+              value={formik_step2.values.otp}
+              onChange={formik_step2.handleChange}
 
-              error={formik.touched.email && Boolean(formik.errors.email)}
-              helperText={formik.touched.email && formik.errors.email}
+              error={formik_step2.touched.email && Boolean(formik_step2.errors.email)}
+              helperText={formik_step2.touched.email && formik_step2.errors.email}
             />
             <TextField
               fullWidth
@@ -147,11 +147,11 @@ function ForgetPassword() {
               type="password"
 
               name="newPassword"
-              value={formik.values.newPassword}
-              onChange={formik.handleChange}
+              value={formik_step2.values.newPassword}
+              onChange={formik_step2.handleChange}
 
-              error={formik.touched.email && Boolean(formik.errors.email)}
-              helperText={formik.touched.email && formik.errors.email}
+              error={formik_step2.touched.email && Boolean(formik_step2.errors.email)}
+              helperText={formik_step2.touched.email && formik_step2.errors.email}
             />
             <TextField
               fullWidth
@@ -162,14 +162,14 @@ function ForgetPassword() {
               type="password"
 
               name="confirmPassword"
-              value={formik.values.confirmPassword}
-              onChange={formik.handleChange}
+              value={formik_step2.values.confirmPassword}
+              onChange={formik_step2.handleChange}
 
-              error={formik.touched.email && Boolean(formik.errors.email)}
-              helperText={formik.touched.email && formik.errors.email}
+              error={formik_step2.touched.email && Boolean(formik_step2.errors.email)}
+              helperText={formik_step2.touched.email && formik_step2.errors.email}
             />
 
-            <Button fullWidth variant="contained" color="primary" type="submit">Login</Button>
+            <Button fullWidth variant="contained" color="primary" type="submit">Update Password</Button>
           </Stack>
         </form>
       }
