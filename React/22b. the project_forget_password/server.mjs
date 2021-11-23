@@ -13,11 +13,15 @@ import {
 } from "bcrypt-inzi"
 import jwt from 'jsonwebtoken';
 import cookieParser from 'cookie-parser';
+import postmark from "postmark"
 
 
 const SECRET = process.env.SECRET || "12345"
+const POSTMARK_KEY = process.env.POSTMARK_KEY || "3fb0f0d2-8a71-44eb-aad9-45e8245f8b8c"
 const PORT = process.env.PORT || 5001
 const app = express()
+
+let client = new postmark.ServerClient(POSTMARK_KEY);
 
 mongoose.connect('mongodb+srv://dbuser:dbpassword@cluster0.nr4e4.mongodb.net/myFirstDatabase?retryWrites=true&w=majority');
 
@@ -164,20 +168,33 @@ app.post('/api/v1/otp', (req, res, next) => {
                     return Math.random() * (max - min) + min;
                 }
                 const otp = getRandomArbitrary(11111, 99999).toFixed(0);
-                console.log("otp: ", otp);
 
-                let newOtp = new Otp({
-                    email: req.body.email,
-                    otp: stringToHash(otp),
-                })
-                newOtp.save((err, saved) => {
-                    if (!err) {
-                        // TODO: send otp via email
+                stringToHash(otp).then(hash => {
 
-                        res.send("otp genrated");
-                    } else {
-                        res.status(500).send("error on server")
-                    }
+                    let newOtp = new Otp({
+                        email: req.body.email,
+                        otp: hash
+                    })
+                    newOtp.save((err, saved) => {
+                        if (!err) {
+
+                            client.sendEmail({
+                                "From": "info@sysborg.com",
+                                "To": req.body.email,
+                                "Subject": "forget password OTP",
+                                "TextBody": `Hi ${user.name}, your 5 digit OTP is: ${otp}`
+                            }).then((success, error) => {
+                                if (!success) {
+                                    console.log("postmark error: ", error)
+                                }
+                            });
+
+                            res.send("otp genrated");
+                        } else {
+                            console.log("error: ", err);
+                            res.status(500).send("error on server")
+                        }
+                    })
                 })
 
             } else {
@@ -186,7 +203,7 @@ app.post('/api/v1/otp', (req, res, next) => {
         }
     })
 })
-app.post('/api/v1/otp', (req, res, next) => {
+app.post('/api/v1/forget_password', (req, res, next) => {
 
     if (!req.body.email || !req.body.otp || !req.body.newPassword) {
         console.log("required field missing");
@@ -195,68 +212,56 @@ app.post('/api/v1/otp', (req, res, next) => {
     }
     console.log("req.body: ", req.body);
 
-    Otp.findOne({ email: req.body.email }, (err, otp) => {
+    Otp.findOne({ email: req.body.email })
+        .sort({ _id: -1 })
+        .exec((err, otp) => {
 
-        if (err) {
-            res.status(500).send("error in getting database")
-        } else {
-            if (otp) {
-
-                const created = new Date(otp.created).getTime;
-                const now = new Date().getTime;
-                const diff = now - created
-
-                if (diff > 300000) {
-                    res.status(401).send("otp not valid")
-                } else {
-                    varifyHash(req.body.otp, otp.otp).then(isMatch => {
-                        if (isMatch) {
-
-                            User.findOneAndUpdate(
-                                { email: req.body.email },
-                                { password: stringToHash(req.body.newPassword) },
-                                {},
-                                (err, updated) => {
-                                    if (!err) {
-                                        res.send("password updated");
-                                    } else {
-                                        res.status(500).send("error on server")
-                                    }
-                                }) // executes
-                        } else {
-                            res.status(401).send("otp not valid")
-                        }
-                    })
-                }
-
-
-
-
-                function getRandomArbitrary(min, max) {
-                    return Math.random() * (max - min) + min;
-                }
-                const otp = getRandomArbitrary(11111, 99999).toFixed(0);
-                console.log("otp: ", otp);
-
-                let newOtp = new Otp({
-                    email: req.body.email,
-                    otp: stringToHash(otp),
-                })
-                newOtp.save((err, saved) => {
-                    if (!err) {
-                        // TODO: send otp via email
-
-                        res.send("otp genrated");
-                    } else {
-                        res.status(500).send("error on server")
-                    }
-                })
-
+            if (err) {
+                res.status(500).send("error in getting database")
             } else {
-                res.send("user not found");
+                if (otp) {
+
+                    const created = new Date(otp.created).getTime;
+                    const now = new Date().getTime;
+                    const diff = now - created
+
+                    if (diff > 300000 || otp.used) {
+                        res.status(401).send("otp not valid");
+                    } else {
+                        varifyHash(req.body.otp, otp.otp).then(isMatch => {
+                            if (isMatch) {
+
+                                User.findOneAndUpdate(
+                                    { email: req.body.email },
+                                    { password: stringToHash(req.body.newPassword) },
+                                    {},
+                                    (err, updated) => {
+                                        if (!err) {
+                                            res.send("password updated");
+                                        } else {
+                                            res.status(500).send("error on server")
+                                        }
+                                    }) 
+
+                                otp.update({ used: true })
+                                    .exec((err, updated) => {
+                                        if (!err) {
+                                            console.log("otp updated")
+                                        } else {
+                                            console.log("otp update fail: ", err)
+                                        }
+                                    })
+
+                            } else {
+                                res.status(401).send("otp not valid")
+                            }
+                        })
+                    }
+                } else {
+                    res.status(400).send("invalid otp");
+                }
             }
-        }
-    })
+        })
 })
 
 app.use((req, res, next) => {
